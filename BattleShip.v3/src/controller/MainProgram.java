@@ -11,12 +11,24 @@ public class MainProgram {
         Controller controller;
 
         String name = JOptionPane.showInputDialog("Name?");
-        if (name!=null) controller = new Controller(name);
-        else {
-            JOptionPane.showMessageDialog(null,"Name is invalid! Exiting!");
-            System.exit(0);
+        if (name!=null && !name.equals("")) {
+            String choice = JOptionPane.showInputDialog("8x8 (1) or 10x10 (2)");
+            try {
+                if (Integer.parseInt(choice)==1 || Integer.parseInt(choice)==2) controller = new Controller(name,Integer.parseInt(choice));
+                else {
+                    JOptionPane.showMessageDialog(null,"Invalid! Exiting!");
+                    System.exit(0);
+                }
+            }
+            catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null,"Invalid! Exiting!");
+                System.exit(0);
+            }
         }
 
-        //controller = new Controller();
+        else {
+            JOptionPane.showMessageDialog(null,"Invalid! Exiting!");
+            System.exit(0);
+        }
     }
 }

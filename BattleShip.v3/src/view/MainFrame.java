@@ -20,18 +20,18 @@ public class MainFrame extends JFrame {
         setupFrame();
     }
 
-    public void setupFrame() {
+    private void setupFrame() {
         setSize(width,height);
         setTitle("BattleShip");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         panel = new MainPanel(controller,width,height);
         setContentPane(panel);
-        setResizable(true);
-        pack();
+        setResizable(false);
 
         setLocationRelativeTo(null);
         setVisible(true);
+        pack();
     }
 
     public String getTxtName() {
@@ -64,19 +64,39 @@ public class MainFrame extends JFrame {
 
     public void newPlayer() {
         String newPlayer = JOptionPane.showInputDialog("Name?");
-        if(newPlayer!=null && !newPlayer.equals("")) setTxtName(newPlayer);
+        if (newPlayer!=null && !newPlayer.equals("")) {
+            panel.getWestPanel().setTxtName(newPlayer);
+            String choice = JOptionPane.showInputDialog("8x8 (1) or 10x10 (2)");
+            try {
+                if (Integer.parseInt(choice)==1 || Integer.parseInt(choice)==2) {
+                    controller.createBoard(Integer.parseInt(choice));
+                    panel.getCenterPanel().newBoard(Integer.parseInt(choice));
+                    controller.placeShips(Integer.parseInt(choice));
+
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,"Invalid! Exiting!");
+                    System.exit(0);
+                }
+            }
+            catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null,"Invalid! Exiting!");
+                System.exit(0);
+            }
+        }
+
         else {
-            JOptionPane.showMessageDialog(null,"Invalid name, exiting!");
+            JOptionPane.showMessageDialog(null,"Invalid! Exiting!");
             System.exit(0);
         }
     }
 
-    public void shotHit(int x, int y) {
-        panel.getCenterPanel().shotHit(x,y);
+    public void shotHit(int i, int j) {
+        panel.getCenterPanel().shotHit(i,j);
     }
 
-    public void shotMissed(int x, int y) {
-        panel.getCenterPanel().shotMissed(x,y);
+    public void shotMissed(int i, int j) {
+        panel.getCenterPanel().shotMissed(i,j);
     }
 
     public void setTxtNeed(String need) {
